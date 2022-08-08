@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+
+  # qq机器人
+  cqhttp_bot_wws:
+    image: silicer/go-cqhttp:latest
+    container_name: qqbot-wws
+    restart: always
+    environment:
+      - TZ=Asia/Shanghai
+    volumes:
+      - ./bot/qq/:/data
+    networks:
+      - botnet
+
+  # wows机器人
+  wows-bot:
+    image: wowsbot:v1
+    container_name: wows-bot
+    restart: always
+    networks:
+      - botnet
+    environment:
+      - TZ=Asia/Shanghai
+    volumes:
+      - ./config/config.json:/root/config/config.json
+      - ./config/__bot__.py:/root/config/__bot__.py
+    user: root
+
+networks:
+  botnet:
+    driver: bridge
